@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DriveNation.Data;
 using DriveNation.Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DriveNation.Controllers
 {
+    [Authorize]
     public class CarsController : Controller
     {
         private readonly DriveNationContext _context;
@@ -46,6 +48,7 @@ namespace DriveNation.Controllers
         }
 
         // GET: Cars/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             ViewData["BrandId"] = new SelectList(_context.Set<Brand>(), "Id", "Name");
@@ -57,6 +60,7 @@ namespace DriveNation.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Id,Model,Year,PassengerCapacity,Description,BuyPrice,RentPrice,BrandId")] Car car)
         {
             if (ModelState.IsValid)
@@ -70,6 +74,7 @@ namespace DriveNation.Controllers
         }
 
         // GET: Cars/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Car == null)
@@ -91,6 +96,7 @@ namespace DriveNation.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Model,Year,PassengerCapacity,Description,BuyPrice,RentPrice,BrandId")] Car car)
         {
             if (id != car.Id)
@@ -123,6 +129,7 @@ namespace DriveNation.Controllers
         }
 
         // GET: Cars/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Car == null)
@@ -144,6 +151,7 @@ namespace DriveNation.Controllers
         // POST: Cars/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Car == null)
