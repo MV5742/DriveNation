@@ -1,4 +1,4 @@
-﻿using DriveNation.Data;
+using DriveNation.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +19,7 @@ namespace DriveNation
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddDefaultIdentity<RentACarUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -69,14 +69,14 @@ namespace DriveNation
 
             using (var scope = app.Services.CreateScope())
             {
-                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<RentACarUser>>();
 
                 string email = "admin@admin.com";
                 string password = "Test1234!";
 
                 if(await userManager.FindByEmailAsync(email) == null)
                 {
-                    var user = new IdentityUser();
+                    var user = new RentACarUser();
                     user.UserName = email;
                     user.Email = email;
                     user.EmailConfirmed = true;
