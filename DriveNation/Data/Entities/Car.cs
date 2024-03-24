@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DriveNation.Data.Entities
@@ -18,13 +19,13 @@ namespace DriveNation.Data.Entities
         public int Year { get; set; }
         [Required]
         [Range(1, 12)]
+        [DisplayName("Passenger Capacity")]
         public int PassengerCapacity { get; set; }
         [Required]
         [StringLength(250, MinimumLength = 5)]
         public string? Description { get; set; }
         [Required]
-        public decimal BuyPrice { get; set; }
-        [Required]
+        [DisplayName("Rent Price")]
         public decimal RentPrice { get; set; }
         [Required]
         public int BrandId { get; set; }

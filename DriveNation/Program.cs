@@ -56,7 +56,7 @@ namespace DriveNation
             {
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-                var roles = new[] { "Customer", "Admin" };
+                var roles = new[] { "Admin" };
 
                 foreach (var role in roles)
                 {
@@ -71,14 +71,23 @@ namespace DriveNation
             {
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<RentACarUser>>();
 
-                string email = "admin@admin.com";
-                string password = "Test1234!";
+                string email = "admin.adminov@gmail.com";
+                string username = "AdminAdminov3256";
+                string firstname = "Admin";
+                string lastname = "Adminov";
+                string password = "1qaz@WSX3edc$RFV";
+                string personal_id = "0525746574";
+                string phone = "+359918273645";
 
-                if(await userManager.FindByEmailAsync(email) == null)
+                if (await userManager.FindByEmailAsync(email) == null)
                 {
                     var user = new RentACarUser();
-                    user.UserName = email;
                     user.Email = email;
+                    user.ProfileName = username;
+                    user.FirstName = firstname;
+                    user.LastName = lastname;
+                    user.Personal_Id = personal_id;
+                    user.PhoneNumber = phone;
                     user.EmailConfirmed = true;
 
                     await userManager.CreateAsync(user, password);

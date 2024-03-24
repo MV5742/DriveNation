@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel;
 
 namespace DriveNation.Areas.Identity.Pages.Account
 {
@@ -100,6 +101,11 @@ namespace DriveNation.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             [Required]
+            [StringLength(30, MinimumLength = 2)]
+            [DisplayName("Username")]
+            public string ProfileName { get; set; }
+
+            [Required]
             [Display(Name = "First Name")]
             public string FirstName { get; set; }
 
@@ -110,7 +116,7 @@ namespace DriveNation.Areas.Identity.Pages.Account
             [Required]
             [StringLength(10, MinimumLength = 10)]
             [RegularExpression(@"^\d+$")]
-            [Display(Name = "Personal_ID")]
+            [Display(Name = "Personal ID")]
             public string Personal_Id { get; set; }
 
             [Required]
@@ -133,6 +139,11 @@ namespace DriveNation.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+                user.ProfileName = Input.ProfileName;
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
+                user.Personal_Id = Input.Personal_Id;
+                user.PhoneNumber = Input.PhoneNumber;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
