@@ -24,8 +24,9 @@ namespace DriveNation.Controllers
         // GET: Cars
         public async Task<IActionResult> Index()
         {
-            var driveNationContext = _context.Car.Include(c => c.Brand);
-            return View(await driveNationContext.ToListAsync());
+              return _context.Car != null ? 
+                          View(await _context.Car.ToListAsync()) :
+                          Problem("Entity set 'DriveNationContext.Car'  is null.");
         }
 
         // GET: Cars/Details/5
@@ -37,7 +38,6 @@ namespace DriveNation.Controllers
             }
 
             var car = await _context.Car
-                .Include(c => c.Brand)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (car == null)
             {
@@ -51,7 +51,6 @@ namespace DriveNation.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
-            ViewData["BrandId"] = new SelectList(_context.Set<Brand>(), "Id", "Name");
             return View();
         }
 
@@ -61,7 +60,7 @@ namespace DriveNation.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create([Bind("Id,Model,Year,PassengerCapacity,Description,BuyPrice,RentPrice,BrandId")] Car car)
+        public async Task<IActionResult> Create([Bind("Id,Model,Year,PassengerCapacity,Description,RentPrice,BrandName")] Car car)
         {
             if (ModelState.IsValid)
             {
@@ -69,7 +68,6 @@ namespace DriveNation.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BrandId"] = new SelectList(_context.Set<Brand>(), "Id", "Name", car.BrandId);
             return View(car);
         }
 
@@ -87,7 +85,6 @@ namespace DriveNation.Controllers
             {
                 return NotFound();
             }
-            ViewData["BrandId"] = new SelectList(_context.Set<Brand>(), "Id", "Name", car.BrandId);
             return View(car);
         }
 
@@ -97,7 +94,7 @@ namespace DriveNation.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Model,Year,PassengerCapacity,Description,BuyPrice,RentPrice,BrandId")] Car car)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Model,Year,PassengerCapacity,Description,RentPrice,BrandName")] Car car)
         {
             if (id != car.Id)
             {
@@ -124,7 +121,6 @@ namespace DriveNation.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BrandId"] = new SelectList(_context.Set<Brand>(), "Id", "Name", car.BrandId);
             return View(car);
         }
 
@@ -138,7 +134,6 @@ namespace DriveNation.Controllers
             }
 
             var car = await _context.Car
-                .Include(c => c.Brand)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (car == null)
             {
@@ -163,14 +158,14 @@ namespace DriveNation.Controllers
             {
                 _context.Car.Remove(car);
             }
-
+            
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CarExists(int id)
         {
-            return (_context.Car?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Car?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

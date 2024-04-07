@@ -97,6 +97,36 @@ namespace DriveNation
                 }
             }
 
+            using (var scope = app.Services.CreateScope())
+            {
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<RentACarUser>>();
+
+                string email = "ivan.ivanov@gmail.com";
+                string progileName = "IvanIvanov4257";
+                string firstname = "Ivan";
+                string lastname = "Ivanov";
+                string password = "1Q2w3E4r5T!@#";
+                string personal_id = "0636135584";
+                string phone = "+359123456789";
+
+                if (await userManager.FindByEmailAsync(email) == null)
+                {
+                    var user = new RentACarUser();
+                    user.UserName = email;
+                    user.Email = email;
+                    user.ProfileName = progileName;
+                    user.FirstName = firstname;
+                    user.LastName = lastname;
+                    user.Personal_Id = personal_id;
+                    user.PhoneNumber = phone;
+                    user.EmailConfirmed = false;
+
+                    await userManager.CreateAsync(user, password);
+
+                    await userManager.AddToRoleAsync(user, "Admin");
+                }
+            }
+
             app.Run();
         }
     }

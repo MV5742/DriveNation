@@ -28,10 +28,8 @@ namespace DriveNation.Data.Entities
         [DisplayName("Rent Price")]
         public decimal RentPrice { get; set; }
         [Required]
-        public int BrandId { get; set; }
-
-        [Required]
-        [ForeignKey("BrandId")]
-        public Brand? Brand { get; set; }
+        [StringLength(50, MinimumLength = 3)]
+        [DisplayName("Brand")]
+        public string? BrandName { get; set; }
     }
 }
