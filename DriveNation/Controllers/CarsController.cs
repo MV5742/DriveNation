@@ -60,7 +60,7 @@ namespace DriveNation.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Create([Bind("Id,Model,Year,PassengerCapacity,Description,RentPrice,BrandName")] Car car)
+        public async Task<IActionResult> Create([Bind("Id,Model,Year,PassengerCapacity,Description,RentPrice,BrandName,ImageUrl")] Car car)
         {
             if (ModelState.IsValid)
             {
@@ -94,7 +94,7 @@ namespace DriveNation.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Model,Year,PassengerCapacity,Description,RentPrice,BrandName")] Car car)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Model,Year,PassengerCapacity,Description,RentPrice,BrandName,ImageUrl")] Car car)
         {
             if (id != car.Id)
             {

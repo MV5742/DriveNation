@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using DriveNation.Data.Entities;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -23,5 +24,6 @@ namespace DriveNation
         [StringLength(10, MinimumLength = 10)]
         [DisplayName("Personal ID")]
         public string? Personal_Id { get; set; }
+        public ICollection<Car>? Cars { get; set; } = new List<Car>();
     }
 }

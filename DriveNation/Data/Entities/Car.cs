@@ -31,5 +31,15 @@ namespace DriveNation.Data.Entities
         [StringLength(50, MinimumLength = 3)]
         [DisplayName("Brand")]
         public string? BrandName { get; set; }
+        public bool IsRented { get; set; }
+        [Required]
+        [StringLength(500)]
+        [DisplayName("Car Photo")]
+        [Url]
+        public string? ImageUrl { get; set; }
+        public string? UserId { get; set; }
+
+        [ForeignKey("UserId")]
+        public RentACarUser? User { get; set; }
     }
 }
