@@ -37,6 +37,9 @@ namespace DriveNation.Data.Entities
         [DisplayName("Car Photo")]
         [Url]
         public string? ImageUrl { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime RentDate { get; set; }
+        public DateTime ReturnDate { get; set; }
         public string? UserId { get; set; }
 
         [ForeignKey("UserId")]

@@ -71,6 +71,55 @@ namespace DriveNation.Controllers
             return View(car);
         }
 
+        // GET: Cars/Rent/5
+        public async Task<IActionResult> Rent(int? id)
+        {
+            if (id == null || _context.Car == null)
+            {
+                return NotFound();
+            }
+
+            var car = await _context.Car.FindAsync(id);
+            if (car == null)
+            {
+                return NotFound();
+            }
+            return View(car);
+        }
+
+        // POST: Cars/Rent/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Rent(int id, [Bind("Id,Model,Year,PassengerCapacity,Description,RentPrice,BrandName,ImageUrl,RentDate,ReturnDate,IsRented")] Car car)
+        {
+            if (id != car.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(car);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CarExists(car.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(car);
+        }
+
         // GET: Cars/Edit/5
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
