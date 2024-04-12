@@ -41,6 +41,14 @@ namespace DriveNation.Controllers
             }
         }
 
+        public async Task<IActionResult> MyCars()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                return _context.Car != null ?
+                          View(await _context.Car.Where(x => x.IsRented == true && x.UserId == userId).ToListAsync()) :
+                          Problem("Entity set 'DriveNationContext.Car'  is null.");
+        }
+
         // GET: Cars/Details/5
         public async Task<IActionResult> Details(int? id)
         {
