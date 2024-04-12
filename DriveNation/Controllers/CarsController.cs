@@ -8,15 +8,18 @@ using Microsoft.EntityFrameworkCore;
 using DriveNation.Data;
 using DriveNation.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace DriveNation.Controllers
 {
     [Authorize]
     public class CarsController : Controller
     {
-        private readonly DriveNationContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public CarsController(DriveNationContext context)
+        public CarsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -24,9 +27,18 @@ namespace DriveNation.Controllers
         // GET: Cars
         public async Task<IActionResult> Index()
         {
-              return _context.Car != null ? 
-                          View(await _context.Car.ToListAsync()) :
+            if (User.IsInRole("Admin"))
+            {
+                return _context.Car != null ?
+                          View(await _context.Car.Include(x => x.User).ToListAsync()) :
                           Problem("Entity set 'DriveNationContext.Car'  is null.");
+            }
+            else
+            {
+                return _context.Car != null ?
+                          View(await _context.Car.Where(x => x.IsRented == false).ToListAsync()) :
+                          Problem("Entity set 'DriveNationContext.Car'  is null.");
+            }
         }
 
         // GET: Cars/Details/5
@@ -37,7 +49,7 @@ namespace DriveNation.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Car
+            var car = await _context.Car.Include(x => x.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (car == null)
             {
@@ -101,7 +113,17 @@ namespace DriveNation.Controllers
             {
                 try
                 {
-                    _context.Update(car);
+                    var currentUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    car.UserId = currentUserId;
+                    var currentUser = _context.Users.FirstOrDefault(x => x.Id == currentUserId);
+                    car.User = currentUser;
+
+                    if (!currentUser.Cars.Contains(car))
+                        currentUser.Cars?.Add(car);
+
+                    //_context.Update(car);
+                    //_context.Update(currentUser);
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -143,7 +165,7 @@ namespace DriveNation.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Model,Year,PassengerCapacity,Description,RentPrice,BrandName,ImageUrl")] Car car)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Model,Year,PassengerCapacity,Description,RentPrice,BrandName,ImageUrl,RentDate,ReturnDate,IsRented,UserId")] Car car)
         {
             if (id != car.Id)
             {
@@ -182,7 +204,7 @@ namespace DriveNation.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Car
+            var car = await _context.Car.Include(x => x.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (car == null)
             {

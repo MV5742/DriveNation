@@ -2,6 +2,7 @@ using DriveNation.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using System.Globalization;
 
 namespace DriveNation
 {
@@ -10,8 +11,6 @@ namespace DriveNation
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddDbContext<DriveNationContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DriveNationContext") ?? throw new InvalidOperationException("Connection string 'DriveNationContext' not found.")));
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -52,6 +51,10 @@ namespace DriveNation
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
 
+            CultureInfo ukCulture = new CultureInfo("en-GB");
+            CultureInfo.DefaultThreadCurrentCulture = ukCulture;
+            CultureInfo.DefaultThreadCurrentUICulture = ukCulture;
+
             using (var scope = app.Services.CreateScope())
             {
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
@@ -67,6 +70,7 @@ namespace DriveNation
                 }
             }
 
+            //Creates AdminAdminov2
             using (var scope = app.Services.CreateScope())
             {
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<RentACarUser>>();
@@ -97,6 +101,7 @@ namespace DriveNation
                 }
             }
 
+            //Creates IvanIvanov
             using (var scope = app.Services.CreateScope())
             {
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<RentACarUser>>();
@@ -122,8 +127,6 @@ namespace DriveNation
                     user.EmailConfirmed = false;
 
                     await userManager.CreateAsync(user, password);
-
-                    await userManager.AddToRoleAsync(user, "Admin");
                 }
             }
 

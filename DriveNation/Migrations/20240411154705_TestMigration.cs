@@ -2,9 +2,9 @@
 
 #nullable disable
 
-namespace DriveNation.Data.Migrations
+namespace DriveNation.Migrations
 {
-    public partial class CreatedNewUserDb : Migration
+    public partial class TestMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

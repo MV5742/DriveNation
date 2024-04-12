@@ -4,18 +4,16 @@ using DriveNation.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace DriveNation.Data.Migrations
+namespace DriveNation.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240322180452_AddedCustomUser")]
-    partial class AddedCustomUser
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,6 +21,62 @@ namespace DriveNation.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("DriveNation.Data.Entities.Car", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("BrandName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsRented")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("PassengerCapacity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("RentDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("RentPrice")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("ReturnDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Car");
+                });
 
             modelBuilder.Entity("DriveNation.RentACarUser", b =>
                 {
@@ -80,6 +134,11 @@ namespace DriveNation.Data.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("ProfileName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -241,6 +300,15 @@ namespace DriveNation.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("DriveNation.Data.Entities.Car", b =>
+                {
+                    b.HasOne("DriveNation.RentACarUser", "User")
+                        .WithMany("Cars")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -290,6 +358,11 @@ namespace DriveNation.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DriveNation.RentACarUser", b =>
+                {
+                    b.Navigation("Cars");
                 });
 #pragma warning restore 612, 618
         }

@@ -44,6 +44,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.ReturnDate)
                 </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.User.ProfileName)
+                </th>
             }
             <th></th>
         </tr>
@@ -79,6 +82,9 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.ReturnDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.ProfileName)
                 </td>
             }
             <td>

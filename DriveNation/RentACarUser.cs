@@ -24,6 +24,6 @@ namespace DriveNation
         [StringLength(10, MinimumLength = 10)]
         [DisplayName("Personal ID")]
         public string? Personal_Id { get; set; }
-        public ICollection<Car>? Cars { get; set; } = new List<Car>();
+        public ICollection<Car> Cars { get; set; } = new List<Car>();
     }
 }
