@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DriveNation.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240411140839_MergeContexts")]
+    [Migration("20240412181010_MergeContexts")]
     partial class MergeContexts
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

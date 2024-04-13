@@ -25,5 +25,8 @@ namespace DriveNation
         [DisplayName("Personal ID")]
         public string? Personal_Id { get; set; }
         public ICollection<Car> Cars { get; set; } = new List<Car>();
+
+        [DisplayName("Cars Count")]
+        public int NumberOfCars { get => this.Cars.Count; }
     }
 }

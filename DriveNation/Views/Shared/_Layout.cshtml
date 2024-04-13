@@ -25,10 +25,16 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Cars" asp-action="Index">Browse Cars</a>
                         </li>
-                        @if(!User.IsInRole("Admin"))
+                        @if(!User.IsInRole("Admin") & User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Cars" asp-action="MyCars">My Cars</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users View</a>
                             </li>
                         }
                         <li class="nav-item">
